@@ -109,12 +109,10 @@
                 @foreach($specs as $index => $spec)
                     <div class="row mb-3 spec-row">
                         <div class="col-lg-5">
-                            <input type="text" name="specification[]" class="form-control"
-                                   placeholder="Specification" value="{{ $spec['specification'] }}">
+                            <input type="text" name="specification[]" class="form-control" placeholder="Specification" value="{{ $spec['specification'] }}">
                         </div>
                         <div class="col-lg-5">
-                            <input type="text" name="value[]" class="form-control"
-                                   placeholder="Value" value="{{ $spec['value'] }}">
+                            <input type="text" name="value[]" class="form-control" placeholder="Value" value="{{ $spec['value'] }}">
                         </div>
                         <div class="col-lg-2 d-flex align-items-end">
                             <button type="button" class="btn btn-danger" onclick="this.closest('.spec-row').remove()">Delete</button>
@@ -161,18 +159,15 @@
                     <div class="mb-3">
                         <label class="form-label" for="project-thumbnail-img">Thumbnail Image</label><br>
                         <label class="form-label cursor-pointer" for="project-thumbnail-img">
-                            <img src="{{ asset('assets/front/images/products/'.$edit->thumbnail) }}" style="max-height:250px;height:auto;width:100%"
-                                 id="viewImage">
+                            <img src="{{ $edit->thumbnail ? (filter_var($edit->thumbnail, FILTER_VALIDATE_URL) ? $edit->thumbnail : asset('assets/front/images/products/' . $edit->thumbnail)) : asset('assets/imgprev.png') }}" style="max-height:250px;height:auto;width:100%" id="viewImage">
                         </label>
-                        <input class="form-control d-none" id="project-thumbnail-img" type="file"
-                               accept="image/png, image/gif, image/jpeg" name="thumbnail"
-                               onchange="document.querySelector('#viewImage').src = window.URL.createObjectURL(this.files[0]);">
+                        <input class="form-control d-none" id="project-thumbnail-img" type="file" accept="image/png, image/gif, image/jpeg" name="thumbnail" onchange="document.querySelector('#viewImage').src = window.URL.createObjectURL(this.files[0]);">
                         @error('thumbnail') <div class="text-danger">{{ $message }}</div> @enderror
                     </div>
 
                     {{-- Category --}}
                     <label class="form-label">Category</label>
-                    <select class="form-select" name="category_id">
+                    <select class="form-select" name="category_id" id="category_id">
                         <option disabled selected>Select a Category</option>
                         @foreach($category as $cat)
                             <option value="{{ $cat->id }}" {{ old('category_id', $edit->category_id) == $cat->id ? 'selected' : '' }}>
@@ -181,29 +176,32 @@
                         @endforeach
                     </select>
                     @error('category_id') <div class="text-danger">{{ $message }}</div> @enderror
-
-                    {{-- Brand --}}
+                    
+                    
+                    {{-- Subcategory --}}
                     <div class="mt-3">
-                        <label class="form-label">Brand</label>
-                        <select class="form-select" name="brand_id">
-                            <option disabled selected>Select a Brand</option>
-                            @foreach($brand as $br)
-                                <option value="{{ $br->id }}" {{ old('brand_id', $edit->brand_id) == $br->id ? 'selected' : '' }}>
-                                    {{ $br->name }}
+                        <label class="form-label">Subcategory</label>
+                        <select class="form-select" name="subcategory_id" id="subcategory_id">
+                            <option disabled selected>Select a Subcategory</option>
+                            @foreach($subcategory as $sub_cat)
+                                <option value="{{ $sub_cat->id }}" 
+                                    data-cat="{{ $sub_cat->category_id }}"
+                                    {{ old('subcategory_id', $edit->subcategory_id) == $sub_cat->id ? 'selected' : '' }}>
+                                    {{ $sub_cat->name }}
                                 </option>
                             @endforeach
                         </select>
-                        @error('brand_id') <div class="text-danger">{{ $message }}</div> @enderror
+                        @error('subcategory_id') <div class="text-danger">{{ $message }}</div> @enderror
                     </div>
 
                     {{-- Format --}}
                     <div class="mt-3">
-                        <label class="form-label">Format</label>
-                        <select class="form-select" name="format">
-                            <option disabled selected>Select a Format</option>
-                            @foreach($category as $cat)
-                                <option value="{{ $cat->id }}" {{ old('format') == $cat->id ? 'selected' : '' }}>
-                                    {{ $cat->name }}
+                        <label class="form-label">Tag</label>
+                        <select class="form-select" name="tag">
+                            <option disabled selected>Select a Tag</option>
+                            @foreach($tags as $tag)
+                                <option {{ old('tag', $edit->tag) == $tag->name ? 'selected' : '' }}>
+                                    {{ $tag->name }}
                                 </option>
                             @endforeach
                         </select>
@@ -240,17 +238,11 @@
                 </div>
             </div>
 
-            {{-- Tags --}}
             <div class="card">
                 <div class="card-header">
-                    <h5 class="card-title mb-0">Tags</h5>
+                    <h5 class="card-title mb-0">Others</h5>
                 </div>
                 <div class="card-body">
-                    <label class="form-label">Tag</label>
-                    <input class="form-control" id="choices-text-input" data-choices
-                           placeholder="e.g. Pain Relief, Antihistamine, Supplements" type="text"
-                           name="tag" value="{{  old('tag', $edit->tag) }}">
-                    @error('tag') <div class="text-danger">{{ $message }}</div> @enderror
 
                     <div class="mt-2">
                         <label class="form-label">Search Keyword</label>
@@ -393,4 +385,29 @@ function addRow() {
         });
     });
 </script>
+<script>
+$(document).ready(function() {
+    function filterSubcategories(reset = false) {
+        var selectedCategory = $('#category_id').val();
+        var selectedSubcategory = "{{ old('subcategory_id', $edit->subcategory_id) }}";
+
+        $('#subcategory_id option').hide();
+
+        $('#subcategory_id option[disabled]').show().prop('selected', true);
+
+        $('#subcategory_id option[data-cat="' + selectedCategory + '"]').show();
+
+        if (!reset && selectedSubcategory) {
+            $('#subcategory_id').val(selectedSubcategory);
+        }
+    }
+
+    filterSubcategories();
+
+    $('#category_id').change(function() {
+        filterSubcategories(true);
+    });
+});
+</script>
+
 @endsection

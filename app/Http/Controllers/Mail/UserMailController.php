@@ -67,5 +67,21 @@ public function addAdminMail($toEmail)
         Log::error('❌ Admin Register Mail sending failed: ' . $e->getMessage());
     }
 }
+    public function sendOtpMail($toEmail, $otp)
+    {
+        try {
+            $data = ['otp' => $otp];
+
+            Mail::send('mailTemplates.adminForgotOtp', $data, function ($message) use ($toEmail) {
+                $message->to($toEmail)
+                        ->subject('Your Password Reset OTP');
+            });
+
+            Log::info("✅ OTP mail sent to: {$toEmail}");
+
+        } catch (\Throwable $e) {
+            Log::error('❌ Mail sending failed: ' . $e->getMessage());
+        }
+    }
 
 }

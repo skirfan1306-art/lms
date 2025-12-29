@@ -20,7 +20,7 @@
 @endif
 
 
-{{------------------ *** Success & Error Alerts Start *** ----------------}}
+<!------------------ *** Success & Error Alerts Start *** -------------->
 @session('success')
 <div class="alert alert-success alert-border-left alert-dismissible fade show material-shadow" role="alert"
 style="position: fixed; left: 50%; z-index: 9999999999; width: max-content; top: 10px; transform: translateX(-50%);" >
@@ -49,7 +49,26 @@ style="position: fixed; left: 50%; z-index: 9999999999; width: max-content; top:
         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
 @endif
-{{------------------ *** Success & Error Alerts End *** ------------------}}
+
+<!-- Success Alert -->
+<div id="successAlert" class="alert alert-success alert-border-left alert-dismissible fade material-shadow"
+     role="alert"
+     style="display:none; position: fixed; left: 50%; z-index: 9999999999; width: max-content; top: 10px; transform: translateX(-50%);">
+    <i class="ri-check-double-line align-middle"></i> 
+    <strong>Success</strong> - <span class="msg"></span>
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
+
+<!-- Danger Alert -->
+<div id="errorAlert" class="alert alert-danger alert-border-left alert-dismissible fade material-shadow"
+     role="alert"
+     style="display:none; position: fixed; left: 50%; z-index: 9999999999; width: max-content; top: 10px; transform: translateX(-50%);">
+    <i class="ri-error-warning-line me-3 align-middle"></i> 
+    <strong>Danger</strong> - <span class="msg"></span>
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
+
+ <!-- ----- *** Success & Error Alerts End *** -- ---------->
 
 
         <!-- ========== App Menu ========== -->
@@ -89,5 +108,40 @@ style="position: fixed; left: 50%; z-index: 9999999999; width: max-content; top:
     </div>
 
     @include('admin.layout.footer-links')
+    
+
+<script>
+function showAlert(type, message, timeout = 3500) {
+    const successAlert = document.getElementById('successAlert');
+    const errorAlert = document.getElementById('errorAlert');
+
+    if (successAlert) {
+        successAlert.classList.remove('show');
+        successAlert.style.display = 'none';
+    }
+    if (errorAlert) {
+        errorAlert.classList.remove('show');
+        errorAlert.style.display = 'none';
+    }
+
+    let alertBox = null;
+    if (type === 'success') alertBox = successAlert;
+    else if (type === 'error') alertBox = errorAlert;
+
+    if (!alertBox) return; 
+
+    const msgEl = alertBox.querySelector('.msg');
+    if (msgEl) msgEl.innerText = message;
+    alertBox.style.display = 'block';
+    alertBox.classList.add('show');
+
+    clearTimeout(alertBox.__hideTimer);
+    alertBox.__hideTimer = setTimeout(function () {
+        alertBox.classList.remove('show');
+        alertBox.style.display = 'none';
+    }, timeout);
+}
+</script>
+
 </body>
 </html>

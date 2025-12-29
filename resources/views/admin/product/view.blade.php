@@ -77,7 +77,7 @@
                                                         <div class="hstack gap-3 flex-wrap mb-3">
                                                             <div class="text-muted">Category : <span class="text-body fw-medium">{{ $view->category->name }}</span></div>
                                                             <div class="vr"></div>
-                                                            <div class="text-muted">Brand : <span class="text-body fw-medium">{{ $view->brand->name }}</span></div>
+                                                            <div class="text-muted">Subcategory : <span class="text-body fw-medium">{{ $view->subcategory->name }}</span></div>
                                                             <div class="vr"></div>
                                                             <div class="text-muted">Pack Size : <span class="text-body fw-medium">{{ $view->pack_size }}</span></div>
                                                         </div>

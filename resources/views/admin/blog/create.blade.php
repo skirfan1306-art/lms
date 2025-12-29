@@ -23,7 +23,7 @@
                             <div class="card">
                                 <div class="card-body">
                                     <div class="mt-2 mb-3">
-                                        <img src="{{ asset('assets/admin/images/small/img-4.jpg') }}" id="viewthumbnail" style="max-height:120px; width:auto; height:auto">
+                                        <img src="{{ asset('assets/imgprev.png') }}" id="viewthumbnail" style="max-height:120px; width:auto; height:auto">
                                     </div>
                                     <div class="mb-3 row">
                                     <div class="col-lg-6">
@@ -68,6 +68,20 @@
                                         <label for="choices-text-input" class="form-label">Excerpt</label>
                                         <textarea class="form-control" maxlength="180" rows="5" name="excerpt" placeholder="Write a short excerpt (max 180 characters)..." required>{{ old('excerpt') }}</textarea>
                                     </div>
+                                    
+                                    <div class="mt-2">
+                                        <label class="form-label" >Category</label>
+                                        <select class="form-select" name="category_id">
+                                            @foreach($category as $cat)
+                                            <option value="{{ $cat->id }}">{{ $cat->name }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                    <div class="mt-2">
+                                        <label class="form-label" >Tags</label>
+                                        <input class="form-control" type="text" name="tags" placeholder="e.g. Tag1, Tag2, Tag3">
+                                    </div>
+                                    
                                     <div class="row mt-2">
                                     <div class="col-6">
                                         <label for="choices-status-input" class="form-label" >Status</label>

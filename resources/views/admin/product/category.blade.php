@@ -55,7 +55,7 @@
                                                 <td class="name">{{ $c['slug'] }}</td>
                                                 <td>
                                                     @if($c['status'] == '1')
-                                                        <label for="updateStatus-{{ $c['id'] }}" class="badge bg-success-subtle text-success text-uppercase status cursor-pointer">Active</label>
+                                                        <label for="updateStatus-{{ $c['id'] }}" class="badge bg-success-subtle text-success text-uppercase status cursor-pointer">Active 1</label>
                                                     @elseif($c['status'] == '0')
                                                         <label for="updateStatus-{{ $c['id'] }}" class="badge bg-danger-subtle text-danger text-uppercase status cursor-pointer">Inactive</label>
                                                     @else
@@ -150,7 +150,7 @@
                                 <input type="hidden" name="id" id="edit_id">
                                 <div class="mb-3">
                                     <label for="edit_name" class="form-label">Categoty</label>
-                                    <input type="text" id="edit_name" name="category" class="form-control" placeholder="Enter Category Name" required />
+                                    <input type="text" id="edit_name" name="category" class="form-control" value="" placeholder="Enter Category Name" required />
                                 </div>
                                
                             </div>
@@ -204,15 +204,13 @@
 @endsection
 @section('scripts')
 <script>
-document.addEventListener("click", function (e) {
-    if (e.target.classList.contains("edit-item-btn")) {
-        let id = e.target.getAttribute("data-id");
-        let name = e.target.getAttribute("data-name");
-
-        document.getElementById("edit_id").value = id;
-        document.getElementById("edit_name").value = name;
-    }
+document.addEventListener('click', e => {
+  const btn = e.target.closest('.edit-item-btn');
+  if (!btn) return;
+  edit_id.value = btn.dataset.id || '';
+  edit_name.value = btn.dataset.name || '';
 });
+
 
 document.addEventListener("click", function (e) {
     if (e.target.classList.contains("remove-item-btn")) {

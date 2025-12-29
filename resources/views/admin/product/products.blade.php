@@ -43,7 +43,7 @@
             <th data-sort="name">SKU</th>
             <th data-sort="name">Name</th>
             <th data-sort="one">Category</th>
-            <th data-sort="four">Brand</th>
+            <th data-sort="four">Subcategory</th>
             <th data-sort="two">Pack Size</th>
             <th data-sort="three">Price</th>
             <th data-sort="status">Status</th>
@@ -60,7 +60,7 @@
             <td class="name"><b>{{ $p['sku'] }}</b></td>
             <td class="name">{{ $p['name'] }}</td>
             <td class="one">{{ $p['category']['name'] }}</td>
-            <td class="four">{{ $p['brand']['name'] }}</td>
+            <td class="four">{{ $p['subcategory']['name'] }}</td>
             <td class="two">{{ $p['pack_size'] }}</td>
             <td>
                 <s class="three">{{ number_format($p['old_price'], 2) }}</s><br>
@@ -157,13 +157,12 @@
 @endsection
 @section('scripts')
 <script>
+document.addEventListener('click', function (e) {
+    var btn = e.target.closest('.remove-item-btn');
+    if (!btn) return;
+    var id = btn.getAttribute('data-id') || '';
+    document.getElementById('deleteId').value = id;
 
-document.addEventListener("click", function (e) {
-    if (e.target.classList.contains("remove-item-btn")) {
-        let deleteId = e.target.getAttribute("data-id");
-        document.getElementById("deleteId").value = deleteId;
-    }
 });
 </script>
-
 @endsection

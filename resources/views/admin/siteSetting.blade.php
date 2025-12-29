@@ -80,7 +80,37 @@
                                                     <label class="input-group-text" for="footer_logo">Upload</label>
                                                 </div>                                                
                                             </div>
-                                           
+                                            
+                                            <div>
+                                                <label class="form-label">Address</label>
+                                                <textarea class="form-control" name="address" required>{{ $setting->address }}</textarea>
+                                            </div>
+
+                                            <div class="col-md-6">
+                                                <div>
+                                                    <label class="form-label">Facebook</label>
+                                                    <input type="text" class="form-control" placeholder="https://www.facebook.com/lms" name="facebook" value="{{ $setting->facebook }}">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div>
+                                                    <label class="form-label">Instagram</label>
+                                                    <input type="text" class="form-control" placeholder="https://www.instagram.com/lms" name="instagram" value="{{ $setting->instagram }}">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div>
+                                                    <label class="form-label">Linkedin</label>
+                                                    <input type="text" class="form-control" placeholder="https://www.linkedin.com/lms" name="linkedin" value="{{ $setting->linkedin }}">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div>
+                                                    <label class="form-label">Twitter</label>
+                                                    <input type="text" class="form-control" placeholder="https://x.com/lms" name="twitter" value="{{ $setting->twitter }}">
+                                                </div>
+                                            </div>
+
                                            
                                         </div>
                                         <!--end row-->

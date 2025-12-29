@@ -20,7 +20,7 @@ public function siteUpdate(Request $req)
     ]);
 
     $setting = SiteSetting::first();
-    $setting->fill($req->only(['title', 'email', 'number']));
+    $setting->fill($req->only(['title', 'email', 'number', 'address', 'facebook', 'instagram', 'linkedin', 'twitter']));
 
     foreach (['favicon', 'logo', 'footer_logo'] as $field) {
         $this->uploadFile($req, $field, $setting);

@@ -37,7 +37,7 @@ return [
     | Application Timezone
     |--------------------------------------------------------------------------
     */
-    'timezone' => 'UTC',
+    'timezone' => 'Asia/Kolkata',
 
     /*
     |--------------------------------------------------------------------------
@@ -117,7 +117,7 @@ return [
     */
     App\Providers\AppServiceProvider::class,
 
-    // ✅ Custom mail provider
+    // Custom mail provider
     App\Providers\MailConfigServiceProvider::class,
 ],
 

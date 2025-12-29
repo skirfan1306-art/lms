@@ -69,6 +69,23 @@
                                         <label for="choices-text-input" class="form-label">Excerpt</label>
                                         <textarea class="form-control" maxlength="180" rows="5" name="excerpt" placeholder="Write a short excerpt (max 180 characters)..." required>{{ $blog->excerpt }}</textarea>
                                     </div>
+                                    
+                                    <div class="mt-2">
+                                        <label class="form-label" >Category</label>
+                                        <select class="form-select" name="category_id">
+                                            @foreach($category as $cat)
+                                                <option value="{{ $cat->id }}" {{ $cat->id == $blog->category_id ? 'selected' : '' }}>
+                                                    {{ $cat->name }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                    <div class="mt-2">
+                                        <label class="form-label" >Tags</label>
+                                        <input class="form-control" type="text" name="tags" value="{{ isset($blog->tags) ? implode(', ', json_decode($blog->tags, true)) : '' }}">
+
+                                    </div>
+                                    
                                     <div class="row mt-2">
                                     <div class="col-6">
                                         <label for="choices-status-input" class="form-label" >Status</label>
@@ -92,7 +109,7 @@
                             <!-- end card -->
                             
                             <div class="text-end mb-4">
-                                <a href="javascript:history.back()" class="btn btn-dark w-sm">Back</a>
+                                <a href="{{ route('admin.blogs') }}" class="btn btn-dark w-sm">Back</a>
 
                                 <a href="" class="btn btn-danger w-sm">Cancel</a>
                                 <button type="submit" class="btn btn-success w-sm">Update</button>

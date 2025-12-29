@@ -12,12 +12,12 @@ class Product extends Model
     
     public function category()
     {
-        return $this->belongsTo(Category::class, 'category_id', 'id');
+        return $this->belongsTo(Category::class, 'category_id')->withDefault(['name' => 'N/A','slug' => 'N/A',]);
     }
     
-    public function brand()
+    public function subcategory()
     {
-        return $this->belongsTo(Brand::class, 'brand_id', 'id');
+        return $this->belongsTo(Subcategory::class, 'subcategory_id')->withDefault(['name' => 'N/A','slug' => 'N/A',]);
     }
 
 }

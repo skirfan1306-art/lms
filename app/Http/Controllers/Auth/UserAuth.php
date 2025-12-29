@@ -12,19 +12,31 @@ use App\Http\Controllers\Mail\UserMailController;
 
 class UserAuth extends Controller
 {
+    
+    public function register(){
+        return view('front.register');
+    }
     public function registerAction(Request $req)
     {
         $validated = $req->validate([
-            'name'     => 'required|string|max:255',
-            'number'   => 'required|string|max:20',
+            'number'   => 'required|string|unique:users,number|max:20',
             'email'    => 'required|email|unique:users,email',
-            'password' => 'required|confirmed|min:6',
+            'password' => [
+                            'required',
+                            'confirmed',
+                            'min:8',
+                            'regex:/^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[\W_]).+$/'
+                        ],
+            'term' => 'required',
         ], [
             'email.required' => 'We need your email address.',
             'email.email'    => 'Please enter a valid email address.',
             'email.unique'   => 'This email is already registered. Try logging in instead.',
-            'password.confirmed' => 'Passwords do not match.',
-            'password.min'   => 'Password must be at least :min characters long.',
+            'number.unique'   => 'This Mobile Number is already registered. Try logging in instead.',
+           'password.confirmed' => 'Passwords do not match.',
+            'password.min'       => 'Password must be at least :min characters long.',
+            'password.regex'     => 'Password must contain at least 1 uppercase letter, 1 lowercase letter, 1 number, and 1 special character.',
+     
         ]);
 
         $token = Str::random(64);
@@ -42,10 +54,8 @@ class UserAuth extends Controller
         // Send verification email
         (new UserMailController)->verificationMail($user);
 
-        return response()->json([
-            'success' => true,
-            'message' => 'Your account has been created successfully! We’ve sent a verification link to your email. Please check your inbox and verify your email address to continue.'
-        ]);
+       return redirect()->back()->with('success', 'Your account has been created successfully! We’ve sent a verification link to your email. Please check your inbox and verify your email address to continue.');
+
     }
 
     public function verifyEmail($token)
@@ -61,14 +71,19 @@ class UserAuth extends Controller
         $user->status = 1;
         $user->save();
 
-        Auth::login($user);
+        Auth::guard('web')->login($user);
 
         return redirect()->route('front.dashboard')->with('success', 'Your email has been verified successfully!');
     }
 
+public function renderLogin(){
+    return view('front.login');
+}
 
 public function loginAction(Request $req)
 {
+    
+   
     $req->validate([
         'email' => 'required|string',
         'password' => 'required|string',
@@ -81,61 +96,63 @@ public function loginAction(Request $req)
     $user = User::where('email', $req->email)->first();
 
     if (!$user) {
-        return response()->json([
-            'success' => false,
-            'message' => 'No account found with these credentials.'
-        ]);
+            return back()->with('error', 'No account found with these credentials.')->withInput();
     }
 
     // Check if user is active
+    if ($user->email_verified_at == null || $user->email_verified_at == '') {
+            return back()->with('error', 'Account is not active yet. Please verify your email to activate your account.')->withInput();
+    }
+    
     if ($user->status != 1) {
-        return response()->json([
-            'success' => false,
-            'message' => 'Your account is not active yet. Please verify your email to activate your account.'
-        ]);
+            return back()->with('error', 'Account is deactive. Please contact our support team.')->withInput();
     }
 
     // Attempt login
-    if (Auth::attempt(['email' => $req->email, 'password' => $req->password])) {
-        return response()->json([
-            'success' => true,
-            'message' => 'Login successful!',
-            'redirect_url' => route('front.dashboard')
-        ]);
+    if (Auth::guard('web')->attempt(['email' => $req->email, 'password' => $req->password])) {
+        return redirect()->route('front.dashboard')->with('success', 'Login successful!');
     } else {
-        return response()->json([
-            'success' => false,
-            'message' => 'Invalid password. Please try again.'
-        ]);
+            return back()->with('error', 'Invalid password. Please try again.')->withInput();
     }
 }
 
-
+    public function forget(){
+        return view('front.forgot-password');
+    }
     public function logout()
     {
-        Auth::guard('user')->logout();
-        return redirect()->route('admin.login'); 
+        Auth::guard('web')->logout();
+        return redirect()->route('login'); 
     }
 
 
     public function sendOtp(Request $request)
     {
         $request->validate(['email' => 'required|email']);
-        $admin = Admin::where('email', $request->email)->first();
-
-        if (!$admin) {
-            return back()->withError('Email not found')->withInput();
+    
+        $user = user::where('email', $request->email)->first();
+    
+        if (!$user) {
+            return response()->json([
+                'status' => 'error',
+                'message' => $request->email . ' not register as a user'
+            ]);
         }
-
+    
         $otp = rand(1000, 9999);
-        $admin->otp = $otp;
-        $admin->save();
-
+        $user->otp = $otp;
+        $user->save();
+    
         // Send OTP mail
-        (new AdminMailController)->sendOtpMail($admin->email, $otp);
-
-        return redirect()->route('admin.forgot.otp', $admin->email)->withSuccess('OTP sent to your email');
+        (new UserMailController)->sendOtpMail($user->email, $otp);
+    
+        return response()->json([
+            'status' => 'success',
+            'message' => 'OTP sent to your email',
+            'email' => $user->email
+        ]);
     }
+
 
 
     // Verify OTP
@@ -145,42 +162,74 @@ public function loginAction(Request $req)
             'email' => 'required|email',
             'otp'   => 'required'
         ]);
+        
+  
 
-        $admin = Admin::where('email', $request->email)->first();
+        $user = user::where('email', $request->email)->first();
 
-        if (!$admin || $admin->otp !== $request->otp) {
-            return back()->withError('Invalid or expired OTP');
+        if (!$user || $user->otp !== $request->otp) {
+             return response()->json([
+            'status' => 'error',
+            'message' => 'Invalid or expired OTP'
+            ]);
+            
         }
 
-        session()->put('forgot-email', $admin->email);
+        session()->put('forgot-email', $user->email);
 
-        return redirect()->route('admin.password.reset')->withSuccess('OTP verified! Set new password.');
+        return response()->json([
+            'status' => 'success',
+            'message' => 'OTP verified! Set new password.'
+            ]);
     }
+    
+    
 
     // Reset password
     public function resetPassword(Request $request)
     {
         $request->validate([
-            'password' => 'required|min:6|confirmed',
+            'password' => [
+                            'required',
+                            'confirmed',
+                            'min:8',
+                            'regex:/^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[\W_]).+$/'
+                        ],
+        ], [
+            'password.confirmed' => 'Passwords do not match.',
+            'password.min'       => 'Password must be at least :min characters long.',
+            'password.regex'     => 'Password must contain at least 1 uppercase letter, 1 lowercase letter, 1 number, and 1 special character.'
+            
         ]);
+        
+      
 
         $email = session('forgot-email');
         if (!$email) {
-            return redirect()->route('admin.forgot')->withError('Session expired, please try again.');
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Session expired, please try again.'
+                ]); 
         }
 
-        $admin = Admin::where('email', $email)->first();
-        if (!$admin) {
-            return back()->withError('Something went wrong');
+        $user = user::where('email', $email)->first();
+        if (!$user) {
+             return response()->json([
+                'status' => 'error',
+                'message' => 'User not found!'
+                ]);  
         }
 
-        $admin->password = Hash::make($request->password);
-        $admin->otp = null;
-        $admin->save();
+        $user->password = Hash::make($request->password);
+        $user->otp = null;
+        $user->save();
 
         session()->forget('forgot-email');
 
-        return redirect()->route('admin.login')->withSuccess('Password changed successfully. Please login.');
+         return response()->json([
+            'status' => 'success',
+            'message' => 'Password Successfully Reset'
+            ]);
     }
 
 

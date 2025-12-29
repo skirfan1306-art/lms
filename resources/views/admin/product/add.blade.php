@@ -142,7 +142,7 @@
 
                     {{-- Category --}}
                     <label class="form-label">Category</label>
-                    <select class="form-select" name="category_id">
+                    <select class="form-select" name="category_id" id="category_id">
                         <option disabled selected>Select a Category</option>
                         @foreach($category as $cat)
                             <option value="{{ $cat->id }}" {{ old('category_id') == $cat->id ? 'selected' : '' }}>
@@ -151,29 +151,33 @@
                         @endforeach
                     </select>
                     @error('category_id') <div class="text-danger">{{ $message }}</div> @enderror
-
-                    {{-- Brand --}}
+                    
+                    
+                    {{-- Subcategory --}}
                     <div class="mt-3">
-                        <label class="form-label">Brand</label>
-                        <select class="form-select" name="brand_id">
-                            <option disabled selected>Select a Brand</option>
-                            @foreach($brand as $br)
-                                <option value="{{ $br->id }}" {{ old('brand_id') == $br->id ? 'selected' : '' }}>
-                                    {{ $br->name }}
+                        <label class="form-label">Subcategory</label>
+                        <select class="form-select" name="subcategory_id" id="subcategory_id">
+                            <option disabled selected>Select a Subcategory</option>
+                            @foreach($subcategory as $sub_cat)
+                                <option value="{{ $sub_cat->id }}" 
+                                        data-cat="{{ $sub_cat->category_id }}"
+                                        {{ old('subcategory_id') == $sub_cat->id ? 'selected' : '' }}>
+                                    {{ $sub_cat->name }}
                                 </option>
                             @endforeach
                         </select>
-                        @error('brand_id') <div class="text-danger">{{ $message }}</div> @enderror
+                        @error('subcategory_id') <div class="text-danger">{{ $message }}</div> @enderror
                     </div>
 
-                    {{-- Format --}}
+
+                    {{-- Tag --}}
                     <div class="mt-3">
-                        <label class="form-label">Format</label>
-                        <select class="form-select" name="format">
-                            <option disabled selected>Select a Format</option>
-                            @foreach($category as $cat)
-                                <option value="{{ $cat->id }}" {{ old('format') == $cat->id ? 'selected' : '' }}>
-                                    {{ $cat->name }}
+                        <label class="form-label">Tag</label>
+                        <select class="form-select" name="tag">
+                            <option disabled selected>Select a Tag</option>
+                            @foreach($tags as $tag)
+                                <option {{ old('tag') == $tag->id ? 'selected' : '' }}>
+                                    {{ $tag->name }}
                                 </option>
                             @endforeach
                         </select>
@@ -210,17 +214,11 @@
                 </div>
             </div>
 
-            {{-- Tags --}}
             <div class="card">
                 <div class="card-header">
-                    <h5 class="card-title mb-0">Tags</h5>
+                    <h5 class="card-title mb-0">Others</h5>
                 </div>
                 <div class="card-body">
-                    <label class="form-label">Tag</label>
-                    <input class="form-control" id="choices-text-input" data-choices
-                           placeholder="e.g. Pain Relief, Antihistamine, Supplements" type="text"
-                           name="tag" value="{{ old('tag') }}">
-                    @error('tag') <div class="text-danger">{{ $message }}</div> @enderror
 
                     <div class="mt-2">
                         <label class="form-label">Search Keyword</label>
@@ -351,6 +349,30 @@ function addRow() {
         selectedFiles.forEach(f => dt.items.add(f));
         imageInput.files = dt.files;
     }
+</script>
+<script>
+$(document).ready(function() {
+    function filterSubcategories(reset = false) {
+        var selectedCategory = $('#category_id').val();
+        var oldSubcategory = "{{ old('subcategory_id') }}";
+
+        $('#subcategory_id option').hide();
+
+        $('#subcategory_id option[disabled]').show().prop('selected', true);
+
+        $('#subcategory_id option[data-cat="' + selectedCategory + '"]').show();
+
+        if (!reset && oldSubcategory) {
+            $('#subcategory_id').val(oldSubcategory);
+        }
+    }
+
+    filterSubcategories();
+
+    $('#category_id').change(function() {
+        filterSubcategories(true);
+    });
+});
 </script>
 
 @endsection

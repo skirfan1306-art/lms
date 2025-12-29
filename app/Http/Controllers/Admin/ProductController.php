@@ -2,8 +2,9 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Models\Brand;
 use App\Models\Category;
+use App\Models\Subcategory;
+use App\Models\Tag;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -13,9 +14,10 @@ class ProductController extends Controller
 {
     public function index()
     {
-        $brand = Brand::orderBy('name')->get();
+        $subcategory = Subcategory::orderBy('name')->get();
         $category = Category::orderBy('name')->get();
-        return view('admin.product.add', compact('category', 'brand'));
+        $tags = Tag::orderBy('name')->get();
+        return view('admin.product.add', compact('category', 'subcategory', 'tags'));
     }
 
     public function show()
@@ -42,14 +44,13 @@ class ProductController extends Controller
             'pack_size'   => 'required',
             'quantity'    => 'required|integer',
             'category_id' => 'required|exists:categories,id',
-            'brand_id'    => 'required|exists:brands,id',
+            'subcategory_id'    => 'required|exists:subcategories,id',
             'old_price'   => 'required|numeric',
             'sale_price'  => 'required|numeric',
             'thumbnail'   => 'required|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
             'images.*'    => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
             'specification.*' => 'nullable|string',
             'value.*'        => 'nullable|string',
-            'format'      => 'nullable',
             'product'     => 'nullable',
             'tag'         => 'nullable|string',
             'search'      => 'nullable|string',
@@ -106,7 +107,7 @@ class ProductController extends Controller
             'name'           => $req->name,
             'slug'           => $slug,
             'category_id'    => $req->category_id,
-            'brand_id'       => $req->brand_id,
+            'subcategory_id'       => $req->subcategory_id,
             'old_price'      => $req->old_price,
             'sale_price'     => $req->sale_price,
             'pack_size'      => $req->pack_size,
@@ -128,9 +129,11 @@ class ProductController extends Controller
 public function edit($id)
 {
     $edit = Product::findOrFail($id)->first();
-    $brand = Brand::orderBy('name')->get();
+    $subcategory = Subcategory::orderBy('name')->get();
     $category = Category::orderBy('name')->get();
-    return view('admin.product.edit', compact('edit', 'category', 'brand'));
+    $tags = Tag::orderBy('name')->get();
+    
+    return view('admin.product.edit', compact('edit', 'category', 'subcategory', 'tags'));
 }
 
 public function update(Request $req, $id)
@@ -143,7 +146,7 @@ public function update(Request $req, $id)
         'pack_size'   => 'required',
         'quantity'    => 'required|integer',
         'category_id' => 'required|exists:categories,id',
-        'brand_id'    => 'required|exists:brands,id',
+        'subcategory_id'    => 'required|exists:subcategories,id',
         'old_price'   => 'required|numeric',
         'sale_price'  => 'required|numeric',
         'thumbnail'   => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
@@ -221,7 +224,7 @@ public function update(Request $req, $id)
         'name'           => $req->name,
         'slug'           => $slug,
         'category_id'    => $req->category_id,
-        'brand_id'       => $req->brand_id,
+        'subcategory_id'       => $req->subcategory_id,
         'old_price'      => $req->old_price,
         'sale_price'     => $req->sale_price,
         'pack_size'      => $req->pack_size,

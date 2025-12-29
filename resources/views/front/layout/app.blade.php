@@ -12,15 +12,61 @@
 </head>
 
 <body>
-    
+     
+
+<!-- Toast container (bottom-right) -->
+<div class="toast-container position-fixed top-0 end-0 p-4">
+@if (session('success'))
+  <div id="appToast"
+       class="toast align-items-center text-bg-success border-0 show"
+       role="alert" aria-live="assertive" aria-atomic="true"
+       data-bs-delay="4000" data-bs-autohide="true">
+    <div class="d-flex">
+      <div class="toast-body d-flex gap-2 align-items-center">
+        <i class="fa-solid fa-circle-check fa-lg" aria-hidden="true"></i>
+        <div>
+          <span class="small">{{ session('success') ?? "Your action was completed." }}</span>
+        </div>
+      </div>
+      <button type="button" class="btn-close btn-close-white me-2 m-auto"
+              data-bs-dismiss="toast" aria-label="Close"></button>
+    </div>
+  </div>
+@endif
+@if (session('error'))  
+  <div id="toastDanger"
+       class="toast text-bg-danger border-0 show"
+       role="alert" aria-live="assertive" aria-atomic="true"
+       data-bs-delay="4000" data-bs-autohide="true">
+    <div class="d-flex">
+      <div class="toast-body d-flex gap-2 align-items-center">
+        <i class="fa-solid fa-circle-xmark"></i>
+        <div>
+          <span>{{ session('error') ?? "Something went wrong." }}</span>
+        </div>
+      </div>
+      <button type="button" class="btn-close btn-close-white me-2 m-auto"
+              data-bs-dismiss="toast" aria-label="Close"></button>
+    </div>
+  </div>
+@endif
+</div>
+
+     <div class="preloader">
+      <div class="loader-ripple">
+        <div></div>
+        <div></div>
+      </div>
+    </div>
     @include('front.layout.header')
-    <div class="booking-overlay"></div>
-    @include('front.layout.popup')
     
     @yield('main')
     
     @include('front.layout.footer')
+    
     @include('front.layout.footer-links')
+
+
 </body>
 
 </html>

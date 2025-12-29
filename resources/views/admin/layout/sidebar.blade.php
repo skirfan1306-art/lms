@@ -72,25 +72,10 @@
                                 </ul>
                             </div>
                         </li> <!-- end Dashboard Menu -->
+                        
                         <li class="nav-item">
-                            <a class="nav-link menu-link {{ request()->routeIs(['admin.blogs', 'admin.blog.form', 'admin.blog.edit']) ? 'active' : '' }}" href="#sidebarApps" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarApps">
-                                <i class="ri-apps-2-line"></i> <span data-key="t-apps">Blog</span>
-                            </a>
-                            <div class="collapse menu-dropdown {{ request()->routeIs(['admin.blogs', 'admin.blog.form', 'admin.blog.edit']) ? 'show' : '' }}" id="sidebarApps">
-                                <ul class="nav nav-sm flex-column">
-                                    <li class="nav-item">
-                                        <a href="{{ route('admin.blog.form') }}" class="nav-link {{ request()->routeIs('admin.blog.form') ? 'active' : '' }}" data-key="t-chat"> Create Blog </a>
-                                    </li>
-                                    
-                                    <li class="nav-item">
-                                        <a href="{{ route('admin.blogs') }}" class="nav-link {{ request()->routeIs('admin.blogs') ? 'active' : '' }}" data-key="t-api-key">Blogs</a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link menu-link {{ request()->routeIs('admin.appointment*') ? 'active' : '' }}" href="{{ route('admin.appointment') }}">
-                                <i class="ri-honour-line"></i> <span>Appointments</span>
+                            <a class="nav-link menu-link {{ request()->routeIs('admin.order') ? 'active' : '' }}" href="{{ route('admin.order') }}">
+                                <i class="ri-honour-line"></i> <span>Orders</span>
                             </a>
                         </li>
                         <li class="nav-item">
@@ -103,12 +88,70 @@
                                 <i class="ri-honour-line"></i> <span>Subscribers</span>
                             </a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link menu-link {{ request()->routeIs('admin.users') ? 'active' : '' }}" href="{{ route('admin.users') }}">
+                                <i class="ri-honour-line"></i> <span>User</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link menu-link {{ request()->routeIs('admin.instructors') ? 'active' : '' }}" href="{{ route('admin.instructors') }}">
+                                <i class="ri-honour-line"></i> <span>Instructors</span>
+                            </a>
+                        </li>
+                        
+                        <li class="nav-item">
+                            <a class="nav-link menu-link {{ request()->routeIs(['admin.blog.category', 'admin.blogs', 'admin.blog.form', 'admin.blog.edit']) ? 'active' : '' }}" href="#sidebarApps" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarApps">
+                                <i class="ri-apps-2-line"></i> <span data-key="t-apps">Blog</span>
+                            </a>
+                            <div class="collapse menu-dropdown {{ request()->routeIs(['admin.blog.category', 'admin.blogs', 'admin.blog.form', 'admin.blog.edit']) ? 'show' : '' }}" id="sidebarApps">
+                                <ul class="nav nav-sm flex-column">
+                                    <li class="nav-item">
+                                        <a href="{{ route('admin.blog.category') }}" class="nav-link {{ request()->routeIs('admin.blog.category') ? 'active' : '' }}" data-key="t-chat"> Category </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="{{ route('admin.blog.form') }}" class="nav-link {{ request()->routeIs('admin.blog.form') ? 'active' : '' }}" data-key="t-chat"> Create Blog </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="{{ route('admin.blogs') }}" class="nav-link {{ request()->routeIs('admin.blogs') ? 'active' : '' }}" data-key="t-api-key">Blogs</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </li>
+                        
 
                         <li class="menu-title"><i class="ri-more-fill"></i> <span data-key="t-pages">Products & Services</span></li>                        
 
                         <li class="nav-item">
                             @php
-                                $productRoutes = ['admin.brand','admin.category', 'admin.product.add', 'admin.products'];
+                                $courseRoutes = ['admin.subcategory','admin.category','admin.tag', 'admin.course.add', 'admin.courses'];
+                            @endphp
+                            <a class="nav-link menu-link {{ request()->routeIs($courseRoutes) ? 'active' : '' }}" href="#course" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="category">
+                                <i class="ri-dashboard-2-line"></i> <span>Course</span>
+                            </a>
+                            <div class="collapse menu-dropdown {{ request()->routeIs($courseRoutes) ? 'show' : '' }}" id="course">
+                                <ul class="nav nav-sm flex-column">
+                                    <li class="nav-item">
+                                        <a href="{{ route('admin.category') }}" class="nav-link {{ request()->routeIs('admin.category') ? 'active' : '' }}"> Category </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="{{ route('admin.subcategory') }}" class="nav-link {{ request()->routeIs('admin.subcategory') ? 'active' : '' }}"> Subcategory </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="{{ route('admin.tag') }}" class="nav-link {{ request()->routeIs('admin.tag') ? 'active' : '' }}"> Tag </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="{{ route('admin.course.add') }}" class="nav-link {{ request()->routeIs('admin.course.add') ? 'active' : '' }}"> Create New </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="{{ route('admin.courses') }}" class="nav-link {{ request()->routeIs('admin.courses') ? 'active' : '' }}"> Courses </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </li>
+                        
+                        <li class="nav-item">
+                            @php
+                                $productRoutes = ['admin.product.add', 'admin.products'];
                             @endphp
                             <a class="nav-link menu-link {{ request()->routeIs($productRoutes) ? 'active' : '' }}" href="#category" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="category">
                                 <i class="ri-dashboard-2-line"></i> <span>Product</span>
@@ -116,10 +159,13 @@
                             <div class="collapse menu-dropdown {{ request()->routeIs($productRoutes) ? 'show' : '' }}" id="category">
                                 <ul class="nav nav-sm flex-column">
                                     <li class="nav-item">
-                                        <a href="{{ route('admin.brand') }}" class="nav-link {{ request()->routeIs('admin.brand') ? 'active' : '' }}"> Brand </a>
+                                        <a href="{{ route('admin.category') }}" class="nav-link {{ request()->routeIs('admin.category') ? 'active' : '' }}"> Category </a>
                                     </li>
                                     <li class="nav-item">
-                                        <a href="{{ route('admin.category') }}" class="nav-link {{ request()->routeIs('admin.category') ? 'active' : '' }}"> Category </a>
+                                        <a href="{{ route('admin.subcategory') }}" class="nav-link {{ request()->routeIs('admin.subcategory') ? 'active' : '' }}"> Subcategory </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="{{ route('admin.tag') }}" class="nav-link {{ request()->routeIs('admin.tag') ? 'active' : '' }}"> Tag </a>
                                     </li>
                                     <li class="nav-item">
                                         <a href="{{ route('admin.product.add') }}" class="nav-link {{ request()->routeIs('admin.product.add') ? 'active' : '' }}"> Create New </a>
@@ -150,6 +196,11 @@
                             </div>
                         </li>
                         
+                        <li class="nav-item">
+                            <a class="nav-link menu-link {{ request()->routeIs('admin.coupon') ? 'active' : '' }}" href="{{ route('admin.coupon') }}">
+                                <i class="ri-honour-line"></i> <span>Coupon</span>
+                            </a>
+                        </li>
                         <li class="nav-item">
                             <a class="nav-link menu-link {{ request()->routeIs('admin.branch') ? 'active' : '' }}" href="{{ route('admin.branch') }}">
                                 <i class="ri-honour-line"></i> <span>Branch</span>

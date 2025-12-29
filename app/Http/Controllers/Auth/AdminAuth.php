@@ -54,7 +54,7 @@ class AdminAuth extends Controller
                 Cookie::queue(Cookie::forget('chemist_admin_password'));
             }
 
-            return redirect()->intended(route('admin.dashboard'));
+            return redirect()->route('admin.dashboard');
         }
 
         return back()->withErrors([

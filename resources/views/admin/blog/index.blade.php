@@ -35,10 +35,11 @@
                                     <table class="table align-middle table-nowrap" id="customerTable">
                                         <thead class="table-light">
                                             <tr>
-                                                <th class="sort" data-sort="image">Images</th>
-                                                <th class="sort">Alt</th>
+                                                <th class="sort" data-sort="image">Image</th>
+                                                <th class="sort" data-sort="two">Category</th>
                                                 <th class="sort" data-sort="name">Title</th>
                                                 <th class="sort" data-sort="one">Slug</th>
+                                                <th>Comment</th>
                                                 <th class="sort" data-sort="action">Action</th>
                                             </tr>
                                         </thead>
@@ -48,9 +49,23 @@
                                             @foreach($blog as $data)
                                             <tr>
                                                 <td class="image"><img src="{{ asset('assets/front/images/blog/'.$data['image']) }}" alt="{{ $data['alt'] }}" style="height:80px;width:auto"></td>
-                                                <td>{{ $data['alt'] }}</td>
+                                                <td class="two">{{ $data->category->name }}</td>
                                                 <td class="name">{{ $data['title'] }}</td>
                                                 <td class="one">{{ $data['slug'] }}</td>
+                                                <td>
+                                                    @if($data->comments_count > 0)
+                                                        <a href="{{ route('admin.blog.comments', $data['id']) }}" class="btn btn-success">
+                                                            <i class="ri-chat-3-line align-bottom me-1"></i>
+                                                            Show {{ $data->comments_count }} Comment
+                                                        </a>
+                                                    @else
+                                                        <button class="btn btn-secondary" disabled>
+                                                            <i class="ri-chat-off-line align-bottom me-1"></i>
+                                                            No Comments Yet
+                                                        </button>
+                                                    @endif
+                                                </td>
+
 
                                                 <td>
                                                     <div class="d-flex gap-2">

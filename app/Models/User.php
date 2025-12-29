@@ -26,4 +26,10 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+    
+    public function courseOrders()
+    {
+        return $this->hasMany(CourseOrder::class, 'user_id');
+    }
+
 }

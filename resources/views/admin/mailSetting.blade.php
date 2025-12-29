@@ -87,6 +87,9 @@
                                 <div class="d-flex justify-content-between p-5">
                                     <a href="mail-templates/admin-forgot-otp" target="_blank" class="btn btn-dark bg-gradient waves-effect waves-light">Admin Forgot OTP</a>
                                     <a href="mail-templates/admin-register" target="_blank" class="btn btn-dark bg-gradient waves-effect waves-light">Admin Register</a>
+                                    <a href="mail-templates/user-welcome" target="_blank" class="btn btn-dark bg-gradient waves-effect waves-light">User Welcome</a>
+                                    <a href="mail-templates/user-mail-verification" target="_blank" class="btn btn-dark bg-gradient waves-effect waves-light">User Mail Verification</a>
+                                    <a href="mail-templates/instructor-welcome" target="_blank" class="btn btn-dark bg-gradient waves-effect waves-light">Instructor Welcome</a>
                                 </div>
                             </div>
                         </div>

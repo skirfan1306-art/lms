@@ -1,11 +1,20 @@
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0-alpha1/js/bootstrap.min.js"
-        integrity="sha512-eHx4nbBTkIr2i0m9SANm/cczPESd0DUEcfl84JpIuutE6oDxPhXvskMR08Wmvmfx5wUpVjlWdi82G5YLvqqJdA=="
-        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
-    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
-    <script src="{{ asset('assets/front/js/script.js') }}"></script>
-    <script src="{{ asset('assets/front/js/ajax.js') }}"></script>
-    
-    @yield('scripts')
+ 
+<script src="{{ asset('assets/front/js/jquery-3.7.1.min.js') }}"></script>
+<script src="{{ asset('assets/front/js/modernizr.min.js') }}"></script>
+<script src="{{ asset('assets/front/js/bootstrap.bundle.min.js') }}"></script>
+<script src="{{ asset('assets/front/js/imagesloaded.pkgd.min.js') }}"></script>
+<script src="{{ asset('assets/front/js/jquery.magnific-popup.min.js') }}"></script>
+<script src="{{ asset('assets/front/js/isotope.pkgd.min.html') }}"></script>
+<script src="{{ asset('assets/front/js/jquery.appear.min.js') }}"></script>
+<script src="{{ asset('assets/front/js/jquery.easing.min.js') }}"></script>
+<script src="{{ asset('assets/front/js/owl.carousel.min.js') }}"></script>
+<script src="{{ asset('assets/front/js/counter-up.js') }}"></script>
+<script src="{{ asset('assets/front/js/jquery.nice-select.min.js') }}"></script>
+<script src="{{ asset('assets/front/js/wow.min.js') }}"></script>
+<script src="{{ asset('assets/front/js/main.js') }}"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> 
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script> 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="{{ asset('assets/front/js/custom.js') }}"></script>
+
+@yield('scripts')
